@@ -2,7 +2,7 @@
 
 module StateSpaceSearch
   class Problem
-    attr_reader :start_state
+    attr_reader :goal_condition, :start_state
 
     def self.build(&definition)
       new.tap do |problem|
@@ -12,6 +12,10 @@ module StateSpaceSearch
 
     def start(state)
       @start_state = state
+    end
+
+    def goal?(&condition)
+      @goal_condition = condition
     end
   end
 

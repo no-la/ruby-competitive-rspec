@@ -16,4 +16,13 @@ RSpec.describe StateSpaceSearch::Problem do
 
     expect(problem.start_state).to eq([1, 2])
   end
+
+  it 'ゴール条件を設定する' do
+    problem = search_problem do
+      goal? { |state| state == 3 }
+    end
+
+    expect(problem.goal_condition.call(2)).to be(false)
+    expect(problem.goal_condition.call(3)).to be(true)
+  end
 end
