@@ -18,7 +18,7 @@ module StateSpaceSearch
   end
 
   class BFS
-    def self.search(start:, goal:, transitions:)
+    def self.search(start:, goal:, transitions:, valid: ->(_state) { true })
       queue = [start]
       head = 0
       visited = { start => true }
@@ -45,6 +45,7 @@ module StateSpaceSearch
         end
 
         transitions.call(state).each do |next_state|
+          next unless valid.call(next_state)
           next if visited[next_state]
 
           visited[next_state] = true
@@ -65,7 +66,7 @@ module StateSpaceSearch
   end
 
   class DFS
-    def self.search(start:, goal:, transitions:)
+    def self.search(start:, goal:, transitions:, valid: ->(_state) { true })
       stack = [[start, nil, 0]]
       visited = {}
       visit_order = []
@@ -93,7 +94,10 @@ module StateSpaceSearch
         end
 
         transitions.call(state).reverse_each do |next_state|
-          stack << [next_state, state, distance + 1] unless visited[next_state]
+          next unless valid.call(next_state)
+          next if visited[next_state]
+
+          stack << [next_state, state, distance + 1]
         end
       end
 

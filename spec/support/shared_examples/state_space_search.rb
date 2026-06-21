@@ -51,4 +51,23 @@ RSpec.shared_examples 'state space search' do
 
     expect(result).to be_reachable
   end
+
+  it '無効な状態を探索対象から除外する' do
+    graph = {
+      1 => [2, 3],
+      2 => [4],
+      3 => [4],
+      4 => []
+    }
+
+    result = described_class.search(
+      start: 1,
+      goal: ->(state) { state == 4 },
+      transitions: ->(state) { graph.fetch(state) },
+      valid: lambda(&:odd?)
+    )
+
+    expect(result).not_to be_reachable
+    expect(result.visit_order).to eq([1, 3])
+  end
 end
