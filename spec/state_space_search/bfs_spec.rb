@@ -88,4 +88,26 @@ RSpec.describe StateSpaceSearch::BFS do
 
     expect(result.distance).to eq(2)
   end
+
+  it '各状態を最初に発見した親を記録する' do
+    graph = {
+      1 => [2, 3],
+      2 => [4],
+      3 => [4],
+      4 => []
+    }
+
+    result = described_class.search(
+      start: 1,
+      goal: ->(state) { state == 4 },
+      transitions: ->(state) { graph.fetch(state) }
+    )
+
+    expect(result.parents).to eq(
+      1 => nil,
+      2 => 1,
+      3 => 1,
+      4 => 2
+    )
+  end
 end
