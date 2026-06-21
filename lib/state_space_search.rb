@@ -2,13 +2,14 @@
 
 module StateSpaceSearch
   class Result
-    attr_reader :distance, :parents, :visit_order
+    attr_reader :distance, :parents, :path, :visit_order
 
-    def initialize(reachable, visit_order, distance, parents)
+    def initialize(reachable, visit_order, distance, parents, path)
       @reachable = reachable
       @visit_order = visit_order
       @distance = distance
       @parents = parents
+      @path = path
     end
 
     def reachable?
@@ -30,7 +31,12 @@ module StateSpaceSearch
         head += 1
         visit_order << state
 
-        return Result.new(true, visit_order, distances.fetch(state), parents) if goal.call(state)
+        if goal.call(state)
+          path = [state]
+          path << parents.fetch(path.last) until path.last == start
+
+          return Result.new(true, visit_order, distances.fetch(state), parents, path.reverse)
+        end
 
         transitions.call(state).each do |next_state|
           next if visited[next_state]
@@ -42,7 +48,7 @@ module StateSpaceSearch
         end
       end
 
-      Result.new(false, visit_order, nil, parents)
+      Result.new(false, visit_order, nil, parents, nil)
     end
   end
 end
