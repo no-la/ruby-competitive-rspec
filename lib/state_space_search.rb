@@ -2,8 +2,11 @@
 
 module StateSpaceSearch
   class Result
-    def initialize(reachable)
+    attr_reader :visit_order
+
+    def initialize(reachable, visit_order)
       @reachable = reachable
+      @visit_order = visit_order
     end
 
     def reachable?
@@ -16,12 +19,14 @@ module StateSpaceSearch
       queue = [start]
       head = 0
       visited = { start => true }
+      visit_order = []
 
       while head < queue.length
         state = queue[head]
         head += 1
+        visit_order << state
 
-        return Result.new(true) if goal.call(state)
+        return Result.new(true, visit_order) if goal.call(state)
 
         transitions.call(state).each do |next_state|
           next if visited[next_state]
@@ -31,7 +36,7 @@ module StateSpaceSearch
         end
       end
 
-      Result.new(false)
+      Result.new(false, visit_order)
     end
   end
 end

@@ -51,4 +51,22 @@ RSpec.describe StateSpaceSearch::BFS do
 
     expect(result).to be_reachable
   end
+
+  it '深さの浅い状態から順に訪問する' do
+    graph = {
+      1 => [2, 3],
+      2 => [4],
+      3 => [5],
+      4 => [],
+      5 => []
+    }
+
+    result = described_class.search(
+      start: 1,
+      goal: ->(state) { state == 5 },
+      transitions: ->(state) { graph.fetch(state) }
+    )
+
+    expect(result.visit_order).to eq([1, 2, 3, 4, 5])
+  end
 end
