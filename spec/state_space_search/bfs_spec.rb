@@ -39,4 +39,16 @@ RSpec.describe StateSpaceSearch::BFS do
     expect(result).not_to be_reachable
     expect(transition_counts).to eq(1 => 1, 2 => 1)
   end
+
+  it '開始状態がゴールなら遷移せずに到達とする' do
+    transitions = ->(_state) { raise '遷移は呼ばれない' }
+
+    result = described_class.search(
+      start: 1,
+      goal: ->(state) { state == 1 },
+      transitions: transitions
+    )
+
+    expect(result).to be_reachable
+  end
 end
