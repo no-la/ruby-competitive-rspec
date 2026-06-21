@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 module StateSpaceSearch
+  class Problem
+    def self.build(&definition)
+      new.tap do |problem|
+        problem.instance_eval(&definition)
+      end
+    end
+  end
+
   class Result
     attr_reader :distance, :parents, :path, :visit_order
 
@@ -110,4 +118,8 @@ module StateSpaceSearch
       )
     end
   end
+end
+
+def search_problem(&)
+  StateSpaceSearch::Problem.build(&)
 end
