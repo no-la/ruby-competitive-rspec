@@ -63,4 +63,47 @@ module StateSpaceSearch
       )
     end
   end
+
+  class DFS
+    def self.search(start:, goal:, transitions:)
+      stack = [[start, nil, 0]]
+      visited = {}
+      visit_order = []
+      parents = {}
+
+      until stack.empty?
+        state, parent, distance = stack.pop
+        next if visited[state]
+
+        visited[state] = true
+        visit_order << state
+        parents[state] = parent
+
+        if goal.call(state)
+          path = [state]
+          path << parents.fetch(path.last) until path.last == start
+
+          return Result.new(
+            reachable: true,
+            distance: distance,
+            parents: parents,
+            path: path.reverse,
+            visit_order: visit_order
+          )
+        end
+
+        transitions.call(state).reverse_each do |next_state|
+          stack << [next_state, state, distance + 1] unless visited[next_state]
+        end
+      end
+
+      Result.new(
+        reachable: false,
+        distance: nil,
+        parents: parents,
+        path: nil,
+        visit_order: visit_order
+      )
+    end
+  end
 end
