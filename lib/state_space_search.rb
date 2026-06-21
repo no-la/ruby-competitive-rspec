@@ -12,8 +12,22 @@ module StateSpaceSearch
   end
 
   class BFS
-    def self.search(**)
-      Result.new(true)
+    def self.search(start:, goal:, transitions:)
+      queue = [start]
+      head = 0
+
+      while head < queue.length
+        state = queue[head]
+        head += 1
+
+        return Result.new(true) if goal.call(state)
+
+        transitions.call(state).each do |next_state|
+          queue << next_state
+        end
+      end
+
+      Result.new(false)
     end
   end
 end
