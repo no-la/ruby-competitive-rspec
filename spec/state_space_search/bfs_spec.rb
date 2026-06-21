@@ -22,4 +22,21 @@ RSpec.describe StateSpaceSearch::BFS do
 
     expect(result).not_to be_reachable
   end
+
+  it '循環があっても同じ状態を1度だけ探索する' do
+    transition_counts = Hash.new(0)
+    graph = { 1 => [2], 2 => [1] }
+
+    result = described_class.search(
+      start: 1,
+      goal: ->(state) { state == 3 },
+      transitions: lambda do |state|
+        transition_counts[state] += 1
+        transition_counts[state] == 1 ? graph.fetch(state) : []
+      end
+    )
+
+    expect(result).not_to be_reachable
+    expect(transition_counts).to eq(1 => 1, 2 => 1)
+  end
 end
