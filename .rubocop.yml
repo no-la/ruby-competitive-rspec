@@ -11,13 +11,40 @@ AllCops:
 Layout/LineLength:
   Max: 120
 
-# Algorithm snippets are intentionally compact and can be structurally complex.
+# Competitive-programming code is intentionally compact and often complex.
 Metrics/AbcSize:
+  Enabled: false
+Metrics/BlockLength:
   Enabled: false
 Metrics/ClassLength:
   Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
 Metrics/MethodLength:
   Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Metrics/ParameterLists:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
 
+# Short names such as x, y, nx, and ny are conventional in algorithms.
+Naming/MethodParameterName:
+  Enabled: false
+
+# Avoid boilerplate that does not improve small snippets.
+Style/Documentation:
+  Enabled: false
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+# Specs should describe behavior without enforcing a particular writing style.
 RSpec/ExampleLength:
+  Enabled: false
+RSpec/MultipleExpectations:
+  Enabled: false
+RSpec/MultipleMemoizedHelpers:
+  Enabled: false
+RSpec/SpecFilePathFormat:
   Enabled: false
