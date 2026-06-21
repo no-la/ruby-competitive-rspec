@@ -31,7 +31,7 @@ module StateSpaceSearch
     end
 
     def solve_with(strategy)
-      searcher = { bfs: BFS }.fetch(strategy)
+      searcher = { bfs: BFS, dfs: DFS }.fetch(strategy)
       searcher.search(
         start: start_state,
         goal: goal_condition,

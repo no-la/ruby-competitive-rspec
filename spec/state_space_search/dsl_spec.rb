@@ -63,4 +63,25 @@ RSpec.describe StateSpaceSearch::Problem do
     expect(result.distance).to eq(2)
     expect(result.path).to eq([1, 2, 3])
   end
+
+  it 'DSLで定義した問題をDFSで解く' do
+    graph = {
+      1 => [2, 3],
+      2 => [4],
+      3 => [5],
+      4 => [],
+      5 => []
+    }
+    problem = search_problem do
+      start 1
+      goal? { |state| state == 5 }
+      transitions { |state| graph.fetch(state) }
+    end
+
+    result = problem.solve_with(:dfs)
+
+    expect(result).to be_reachable
+    expect(result.visit_order).to eq([1, 2, 4, 3, 5])
+    expect(result.path).to eq([1, 3, 5])
+  end
 end
