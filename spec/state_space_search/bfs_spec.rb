@@ -21,6 +21,7 @@ RSpec.describe StateSpaceSearch::BFS do
     )
 
     expect(result).not_to be_reachable
+    expect(result.distance).to be_nil
   end
 
   it '循環があっても同じ状態を1度だけ探索する' do
@@ -68,5 +69,23 @@ RSpec.describe StateSpaceSearch::BFS do
     )
 
     expect(result.visit_order).to eq([1, 2, 3, 4, 5])
+  end
+
+  it 'ゴールまでの最短距離を返す' do
+    graph = {
+      1 => [2, 3],
+      2 => [4],
+      3 => [5],
+      4 => [5],
+      5 => []
+    }
+
+    result = described_class.search(
+      start: 1,
+      goal: ->(state) { state == 5 },
+      transitions: ->(state) { graph.fetch(state) }
+    )
+
+    expect(result.distance).to eq(2)
   end
 end
