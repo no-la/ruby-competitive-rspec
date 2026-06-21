@@ -29,6 +29,16 @@ module StateSpaceSearch
     def valid?(&condition)
       @valid_condition = condition
     end
+
+    def solve_with(strategy)
+      searcher = { bfs: BFS }.fetch(strategy)
+      searcher.search(
+        start: start_state,
+        goal: goal_condition,
+        transitions: transition_generator,
+        valid: valid_condition
+      )
+    end
   end
 
   class Result

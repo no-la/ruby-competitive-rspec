@@ -48,4 +48,19 @@ RSpec.describe StateSpaceSearch::Problem do
 
     expect(problem.valid_condition.call(:anything)).to be(true)
   end
+
+  it 'DSLで定義した問題をBFSで解く' do
+    problem = search_problem do
+      start 1
+      goal? { |state| state == 3 }
+      transitions { |state| [state + 1] }
+      valid? { |state| state <= 3 }
+    end
+
+    result = problem.solve_with(:bfs)
+
+    expect(result).to be_reachable
+    expect(result.distance).to eq(2)
+    expect(result.path).to eq([1, 2, 3])
+  end
 end
