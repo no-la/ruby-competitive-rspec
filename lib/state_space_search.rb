@@ -2,7 +2,7 @@
 
 module StateSpaceSearch
   class Problem
-    attr_reader :goal_condition, :start_state
+    attr_reader :goal_condition, :start_state, :transition_generator
 
     def self.build(&definition)
       new.tap do |problem|
@@ -16,6 +16,10 @@ module StateSpaceSearch
 
     def goal?(&condition)
       @goal_condition = condition
+    end
+
+    def transitions(&generator)
+      @transition_generator = generator
     end
   end
 

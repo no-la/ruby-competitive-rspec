@@ -25,4 +25,12 @@ RSpec.describe StateSpaceSearch::Problem do
     expect(problem.goal_condition.call(2)).to be(false)
     expect(problem.goal_condition.call(3)).to be(true)
   end
+
+  it '次の状態を生成する遷移を設定する' do
+    problem = search_problem do
+      transitions { |state| [state - 1, state + 1, state * 2] }
+    end
+
+    expect(problem.transition_generator.call(3)).to eq([2, 4, 6])
+  end
 end
