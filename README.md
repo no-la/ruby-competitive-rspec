@@ -2,6 +2,20 @@
 
 Rubyで競技プログラミングをするために、RSpecで基礎アルゴリズムのスニペットを育てる実験用リポジトリです。
 
+## セットアップ
+
+Ruby 3.3.11を使用します。macOSではHomebrewの `ruby@3.3` を前提にしています。
+
+```sh
+bundle install
+bundle exec rspec
+bundle exec rubocop
+```
+
+`bundle exec rake` で全specとRuboCopをまとめて実行できます。スニペットは `lib/`、対応するspecは `spec/` に配置します。
+
+LazyVimではRuby extra、test extra、DAP extraを設定済みです。Ruby LSP、RuboCop、Treesitter、neotest-rspec、デバッガを利用できます。主なテスト操作は `<leader>tr`（カーソル位置）、`<leader>tt`（現在のファイル）、`<leader>tT`（全件）、`<leader>td`（カーソル位置をデバッグ）です。
+
 ## 目的
 
 wakate.rbでの発表準備として、RubyでAtCoderの問題を解きつつ、RSpecを競プロにどう活かせるかを試します。
