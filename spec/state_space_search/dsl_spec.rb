@@ -124,4 +124,18 @@ RSpec.describe StateSpaceSearch::Problem do
 
     expect(problem.solve_with(:bfs)).to be_reachable
   end
+
+  it '未知の探索戦略ならエラーにする' do
+    problem = search_problem do
+      start 1
+      goal? { true }
+      transitions { [] }
+    end
+
+    expect { problem.solve_with(:dijkstra) }
+      .to raise_error(
+        StateSpaceSearch::UnknownStrategyError,
+        'unknown strategy: :dijkstra; expected :bfs or :dfs'
+      )
+  end
 end

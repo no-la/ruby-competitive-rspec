@@ -4,6 +4,9 @@ module StateSpaceSearch
   class ConfigurationError < StandardError
   end
 
+  class UnknownStrategyError < ArgumentError
+  end
+
   class Problem
     attr_reader :goal_condition, :start_state, :transition_generator, :valid_condition
 
@@ -37,7 +40,9 @@ module StateSpaceSearch
 
     def solve_with(strategy)
       validate!
-      searcher = { bfs: BFS, dfs: DFS }.fetch(strategy)
+      searcher = { bfs: BFS, dfs: DFS }.fetch(strategy) do
+        raise UnknownStrategyError, "unknown strategy: #{strategy.inspect}; expected :bfs or :dfs"
+      end
       searcher.search(
         start: start_state,
         goal: goal_condition,
