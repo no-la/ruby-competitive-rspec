@@ -2,10 +2,16 @@
 
 module StateSpaceSearch
   class Problem
+    attr_reader :start_state
+
     def self.build(&definition)
       new.tap do |problem|
         problem.instance_eval(&definition)
       end
+    end
+
+    def start(state)
+      @start_state = state
     end
   end
 

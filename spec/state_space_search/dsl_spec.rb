@@ -8,4 +8,12 @@ RSpec.describe StateSpaceSearch::Problem do
 
     expect(problem).to be_a(described_class)
   end
+
+  it '開始状態を設定する' do
+    problem = search_problem do
+      start [1, 2]
+    end
+
+    expect(problem.start_state).to eq([1, 2])
+  end
 end
