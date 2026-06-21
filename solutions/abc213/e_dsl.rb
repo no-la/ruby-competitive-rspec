@@ -218,8 +218,8 @@ def free_closure(seeds, height, width, passable)
   result.visit_order.select { |state| state[0].is_a?(Integer) }
 end
 
-height, width = STDIN.gets.split.map(&:to_i)
-grid = Array.new(height) { STDIN.gets.chomp.chars }
+height, width = $stdin.gets.split.map(&:to_i)
+grid = Array.new(height) { $stdin.gets.chomp.chars }
 goal = [height - 1, width - 1]
 
 passable = {}
@@ -232,7 +232,10 @@ passable[[0, 0]] = true
 
 frontier = free_closure([[0, 0]], height, width, passable)
 seen = {}
-frontier.each { |state| seen[state] = true }
+frontier.each do |state|
+  seen[state] = true
+  passable[state] = true
+end
 punches = 0
 
 loop do
@@ -269,6 +272,8 @@ loop do
   punches += 1
   next_seeds.each { |state| passable[state] = true }
   frontier = free_closure(next_seeds, height, width, passable)
-  frontier.each { |state| seen[state] = true }
-  frontier.each { |state| passable[state] = true }
+  frontier.each do |state|
+    seen[state] = true
+    passable[state] = true
+  end
 end

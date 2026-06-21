@@ -40,8 +40,8 @@ DIRS = [
   [0, 1]
 ].freeze
 
-HEIGHT, WIDTH = STDIN.gets.split.map(&:to_i)
-GRID = Array.new(HEIGHT) { STDIN.gets.chomp.chars }
+HEIGHT, WIDTH = $stdin.gets.split.map(&:to_i)
+GRID = Array.new(HEIGHT) { $stdin.gets.chomp.chars }
 INF = 1 << 60
 
 dist = Array.new(HEIGHT) { Array.new(WIDTH, INF) }

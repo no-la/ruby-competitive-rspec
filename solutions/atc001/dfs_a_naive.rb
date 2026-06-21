@@ -7,8 +7,8 @@ DIRECTIONS = [
   [0, 1]
 ].freeze
 
-height, width = STDIN.gets.split.map(&:to_i)
-grid = Array.new(height) { STDIN.gets.chomp.chars }
+height, width = $stdin.gets.split.map(&:to_i)
+grid = Array.new(height) { $stdin.gets.chomp.chars }
 
 start = nil
 goal = nil
@@ -40,8 +40,8 @@ while head < queue.length
     ny = y + dy
     nx = x + dx
 
-    next if ny < 0 || ny >= height
-    next if nx < 0 || nx >= width
+    next if ny.negative? || ny >= height
+    next if nx.negative? || nx >= width
     next if grid[ny][nx] == '#'
     next if visited[ny][nx]
 
