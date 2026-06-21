@@ -33,4 +33,19 @@ RSpec.describe StateSpaceSearch::Problem do
 
     expect(problem.transition_generator.call(3)).to eq([2, 4, 6])
   end
+
+  it '探索可能な状態の条件を設定する' do
+    problem = search_problem do
+      valid? { |state| state.between?(0, 10) }
+    end
+
+    expect(problem.valid_condition.call(-1)).to be(false)
+    expect(problem.valid_condition.call(5)).to be(true)
+  end
+
+  it 'valid?を省略した場合はすべての状態を許可する' do
+    problem = search_problem { nil }
+
+    expect(problem.valid_condition.call(:anything)).to be(true)
+  end
 end

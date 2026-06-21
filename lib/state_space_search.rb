@@ -2,7 +2,11 @@
 
 module StateSpaceSearch
   class Problem
-    attr_reader :goal_condition, :start_state, :transition_generator
+    attr_reader :goal_condition, :start_state, :transition_generator, :valid_condition
+
+    def initialize
+      @valid_condition = ->(_state) { true }
+    end
 
     def self.build(&definition)
       new.tap do |problem|
@@ -20,6 +24,10 @@ module StateSpaceSearch
 
     def transitions(&generator)
       @transition_generator = generator
+    end
+
+    def valid?(&condition)
+      @valid_condition = condition
     end
   end
 
