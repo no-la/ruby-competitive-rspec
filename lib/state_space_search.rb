@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 module StateSpaceSearch
+  class ConfigurationError < StandardError
+  end
+
   class Problem
     attr_reader :goal_condition, :start_state, :transition_generator, :valid_condition
 
     def initialize
+      @start_configured = false
       @valid_condition = ->(_state) { true }
     end
 
@@ -16,6 +20,7 @@ module StateSpaceSearch
 
     def start(state)
       @start_state = state
+      @start_configured = true
     end
 
     def goal?(&condition)
@@ -31,6 +36,7 @@ module StateSpaceSearch
     end
 
     def solve_with(strategy)
+      validate!
       searcher = { bfs: BFS, dfs: DFS }.fetch(strategy)
       searcher.search(
         start: start_state,
@@ -38,6 +44,14 @@ module StateSpaceSearch
         transitions: transition_generator,
         valid: valid_condition
       )
+    end
+
+    private
+
+    def validate!
+      raise ConfigurationError, 'start is required' unless @start_configured
+      raise ConfigurationError, 'goal? is required' unless goal_condition
+      raise ConfigurationError, 'transitions is required' unless transition_generator
     end
   end
 

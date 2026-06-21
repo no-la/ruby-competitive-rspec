@@ -84,4 +84,44 @@ RSpec.describe StateSpaceSearch::Problem do
     expect(result.visit_order).to eq([1, 2, 4, 3, 5])
     expect(result.path).to eq([1, 3, 5])
   end
+
+  it 'startがなければエラーにする' do
+    problem = search_problem do
+      goal? { true }
+      transitions { [] }
+    end
+
+    expect { problem.solve_with(:bfs) }
+      .to raise_error(StateSpaceSearch::ConfigurationError, 'start is required')
+  end
+
+  it 'goal?がなければエラーにする' do
+    problem = search_problem do
+      start 1
+      transitions { [] }
+    end
+
+    expect { problem.solve_with(:bfs) }
+      .to raise_error(StateSpaceSearch::ConfigurationError, 'goal? is required')
+  end
+
+  it 'transitionsがなければエラーにする' do
+    problem = search_problem do
+      start 1
+      goal? { true }
+    end
+
+    expect { problem.solve_with(:bfs) }
+      .to raise_error(StateSpaceSearch::ConfigurationError, 'transitions is required')
+  end
+
+  it 'nilを開始状態として扱える' do
+    problem = search_problem do
+      start nil
+      goal?(&:nil?)
+      transitions { [] }
+    end
+
+    expect(problem.solve_with(:bfs)).to be_reachable
+  end
 end
